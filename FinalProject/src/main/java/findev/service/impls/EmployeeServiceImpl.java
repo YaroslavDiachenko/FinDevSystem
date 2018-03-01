@@ -14,7 +14,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public List<Employee> listAll() {
