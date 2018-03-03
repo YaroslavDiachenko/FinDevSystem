@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Employees")
+@Table(name = "employees")
 @Getter
 @Setter
 @ToString
@@ -27,4 +27,7 @@ public class Employee extends BaseEntity {
 
     private Set Department;
     private Set Status;
+
+    @Column(name = "salary")
+    private BigDecimal salary;
 }
