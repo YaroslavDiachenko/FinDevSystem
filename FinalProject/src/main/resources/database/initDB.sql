@@ -1,30 +1,76 @@
 CREATE DATABASE findev;
 USE findev;
 
-CREATE TABLE employees (
-  id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
-  salary DECIMAL(13,2) NOT NULL
-)
-  ENGINE=InnoDB;
-
-
+#Security:
 CREATE TABLE roles (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL
-)
-  ENGINE = InnoDB;
-
+  name VARCHAR(100) NOT NULL,
+  UNIQUE (name));
 
 CREATE TABLE users (
   id       BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role_id  BIGINT(20)   NOT NULL,
-  FOREIGN KEY (role_id) REFERENCES roles (id)
-)
-  ENGINE = InnoDB;
+  FOREIGN KEY (role_id) REFERENCES roles (id),
+  UNIQUE (email));
+
+#Entities:
+CREATE TABLE employees (
+  id            BIGINT(20)     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  first_name    VARCHAR(255)   NOT NULL,
+  last_name     VARCHAR(255)   NOT NULL,
+  email         VARCHAR(255)   NOT NULL,
+  hour_rate     DECIMAL(13, 2) NOT NULL,
+  position_id   BIGINT(20)     NOT NULL,
+  department_id BIGINT(20)     NOT NULL,
+  status_id     BIGINT(20)     NOT NULL,
+  FOREIGN KEY (position_id) REFERENCES positions (id),
+  FOREIGN KEY (department_id) REFERENCES departments (id),
+  FOREIGN KEY (status_id) REFERENCES statuses (id),
+  UNIQUE (email));
+
+CREATE TABLE positions (
+  id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL);
+
+CREATE TABLE departments (
+  id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL);
+
+CREATE TABLE statuses (
+  id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL);
+
+#Events:
+CREATE TABLE eventtypes (
+  id    BIGINT(20)     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name  VARCHAR(255)   NOT NULL,
+  coeft DECIMAL(13, 2) NOT NULL);
+
+CREATE TABLE events (
+  id           BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  date         DATE       NOT NULL,
+  hours        BIGINT(20) NOT NULL,
+  eventtype_id BIGINT(20) NOT NULL,
+  FOREIGN KEY (eventtype_id) REFERENCES eventtypes (id));
+
+CREATE TABLE events_employees (
+  event_id    INT NOT NULL,
+  employee_id INT NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events (id),
+  FOREIGN KEY (employee_id) REFERENCES employees (id),
+  UNIQUE (event_id, employee_id));
+
+/*
+CREATE TABLE employees_absence (
+  id          BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  date        DATE       NOT NULL,
+  employee_id BIGINT(20) NOT NULL,
+  status_id   BIGINT(20) NOT NULL,
+  FOREIGN KEY (employee_id) REFERENCES employees (id),
+  FOREIGN KEY (status_id) REFERENCES statuses (id));
+*/
 
 
 

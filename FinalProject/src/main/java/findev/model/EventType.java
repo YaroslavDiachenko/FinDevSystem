@@ -14,9 +14,9 @@ import javax.persistence.Table;
 @Setter
 @ToString
 public class EventType extends BaseEntity {
-    @Column(name = "NAME")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "COEFT")
+    @Column(name = "coeft")
     private String coefficient;
 }
