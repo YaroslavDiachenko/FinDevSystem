@@ -3,6 +3,7 @@ package findev.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.mapping.Set;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,6 +19,12 @@ public class Employee extends BaseEntity {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "address")
+    private String address;
+
+    private Set Department;
+    private Set Status;
 
     @Column(name = "salary")
     private BigDecimal salary;
