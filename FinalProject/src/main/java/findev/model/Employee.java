@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -23,4 +21,22 @@ public class Employee extends BaseEntity {
 
     @Column(name = "salary")
     private BigDecimal salary;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "departament_id", referencedColumnName = "id")
+//    Department department;
+
+    /*
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "HOUR_RATE")
+    private BigDecimal hourRate;
+
+    Position position;
+
+    Department department;
+
+    Status status;
+*/
 }

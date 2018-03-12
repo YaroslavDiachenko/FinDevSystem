@@ -9,11 +9,17 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Statuses")
+@Table(name = "statuses")
 @Getter
 @Setter
 @ToString
 public class Status extends BaseEntity {
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
+
+    @Column(name = "COEFT")
+    private String coefficient;
+
+    @Column(name = "PAID_DAYS")
+    private Integer paidDays;
 }

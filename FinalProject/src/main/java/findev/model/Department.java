@@ -9,11 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Departments")
+@Table(name = "departments")
 @Getter
 @Setter
 @ToString
 public class Department extends BaseEntity {
     @Column(name = "name")
     private String name;
+
+//    @OneToMany(mappedBy = "department")
+//    private List<Employee> employeeList;
 }

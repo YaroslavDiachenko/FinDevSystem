@@ -3,5 +3,5 @@ package findev.repository;
 import findev.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StatusRepository extends JpaRepository<Status, Long> {
+public interface IRepositoryStatus extends JpaRepository<Status, Long> {
 }

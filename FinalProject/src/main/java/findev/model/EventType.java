@@ -9,11 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "positions")
+@Table(name = "eventtypes")
 @Getter
 @Setter
 @ToString
-public class Position extends BaseEntity {
+public class EventType extends BaseEntity {
     @Column(name = "NAME")
     private String name;
+
+    @Column(name = "COEFT")
+    private String coefficient;
 }
