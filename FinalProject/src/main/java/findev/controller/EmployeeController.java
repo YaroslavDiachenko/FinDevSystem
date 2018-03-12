@@ -46,7 +46,7 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // ==== save ===============================================================
+    // ==== update ===============================================================
     @ApiOperation(value = "Update object")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
