@@ -1,8 +1,11 @@
 package findev.service.impls;
 
+import findev.controller.EmployeeController;
 import findev.model.Employee;
 import findev.repository.IRepositoryEmployee;
 import findev.service.IServiceEmployee;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,8 @@ import java.util.List;
 
 @Service
 public class ServiceEmployee implements IServiceEmployee {
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
     @Autowired
     private IRepositoryEmployee repositoryEmployee;
 
@@ -25,6 +30,7 @@ public class ServiceEmployee implements IServiceEmployee {
 
     @Override
     public void save(Employee employee) {
+        logger.info("ENTERED SAVE METHOD IN ServiceEmployee");
         repositoryEmployee.save(employee);
     }
 

@@ -19,4 +19,7 @@ public class Department extends BaseEntity {
 
 //    @OneToMany(mappedBy = "department")
 //    private List<Employee> employeeList;
+
+    public Department() {
+    }
 }
