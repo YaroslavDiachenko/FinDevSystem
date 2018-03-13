@@ -39,14 +39,4 @@ public class EmployeeDTO {
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
     }
-
-    @Override
-    public String toString() {
-        return "EmployeeDTO{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", salary=" + salary +
-                ", departmentId=" + departmentId +
-                '}';
-    }
 }
