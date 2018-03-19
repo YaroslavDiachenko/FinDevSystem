@@ -1,30 +1,28 @@
 package findev.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "employees")
-@Getter
-@Setter
-@ToString
 public class Employee extends BaseEntity {
-    @Column(name = "first_name")
+    @Column(name = "firstname")
     private String firstName;
-
-    @Column(name = "last_name")
+    @Column(name = "lastname")
     private String lastName;
-
-    @Column(name = "salary")
-    private BigDecimal salary;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "email")
+    private String email;
+    @Column(name = "hourrate")
+    private BigDecimal hourRate;
+    @ManyToOne
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    private Position position;
+    @ManyToOne
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
+    @ManyToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Status status;
 
     public String getFirstName() {
         return firstName;
@@ -32,18 +30,35 @@ public class Employee extends BaseEntity {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return lastName;
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public BigDecimal getSalary() {
-        return salary;
+
+    public String getEmail() {
+        return email;
     }
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
+    public void setEmail(String email) {
+        this.email = email;
     }
+
+    public BigDecimal getHourRate() {
+        return hourRate;
+    }
+    public void setHourRate(BigDecimal hourRate) {
+        this.hourRate = hourRate;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public Department getDepartment() {
         return department;
     }
@@ -51,29 +66,17 @@ public class Employee extends BaseEntity {
         this.department = department;
     }
 
-    /*
-    @Column(name = "EMAIL")
-    private String email;
-
-    @Column(name = "HOUR_RATE")
-    private BigDecimal hourRate;
-
-    Position position;
-
-    Department department;
-
-    Status status;
-*/
-
-
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", salary=" + salary +
-                ", department=" + department.getId() +
+        return "{" +
+                "id='" + getId() + '\'' +
                 '}';
     }
 }

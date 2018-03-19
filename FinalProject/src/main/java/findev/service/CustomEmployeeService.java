@@ -1,44 +1,47 @@
-package findev.service.impls;
+package findev.service;
 
-import findev.controller.EmployeeController;
 import findev.model.Employee;
 import findev.repository.IRepositoryEmployee;
-import findev.service.IServiceEmployee;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class ServiceEmployee implements IServiceEmployee {
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
-
+public class CustomEmployeeService implements IEmployeeService {
     @Autowired
     private IRepositoryEmployee repositoryEmployee;
+    @Autowired
+    public void setRepositoryEmployee(IRepositoryEmployee repositoryEmployee) {
+        this.repositoryEmployee = repositoryEmployee;
+    }
 
+    @Transactional
     @Override
     public boolean isExists(Long id) {
         return repositoryEmployee.exists(id);
     }
 
+    @Transactional
     @Override
     public Employee getById(Long id) {
         return repositoryEmployee.findOne(id);
     }
 
+    @Transactional
     @Override
     public void save(Employee employee) {
-        logger.info("ENTERED SAVE METHOD IN ServiceEmployee");
         repositoryEmployee.save(employee);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         repositoryEmployee.delete(id);
     }
 
+    @Transactional
     @Override
     public List<Employee> getAll() {
         return repositoryEmployee.findAll();

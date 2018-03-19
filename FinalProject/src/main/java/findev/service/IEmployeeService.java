@@ -4,7 +4,7 @@ import findev.model.Employee;
 
 import java.util.List;
 
-public interface IServiceEmployee {
+public interface IEmployeeService {
 
     boolean isExists(Long id);
 
