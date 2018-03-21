@@ -1,4 +1,3 @@
-/*
 package findev.config;
 
 import org.springframework.security.core.AuthenticationException;
@@ -20,4 +19,4 @@ public final class RestAuthenticationEntryPoint implements AuthenticationEntryPo
             throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
-}*/
+}

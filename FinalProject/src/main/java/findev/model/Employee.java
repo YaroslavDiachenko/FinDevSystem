@@ -23,6 +23,9 @@ public class Employee extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public String getFirstName() {
         return firstName;
@@ -73,10 +76,10 @@ public class Employee extends BaseEntity {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + getId() + '\'' +
-                '}';
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }

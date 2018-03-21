@@ -14,15 +14,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-
+public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private IRepositoryUser userRepository;
+    private IRepositoryUser repositoryUser;
 
     @Override
 //    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = repositoryUser.findByUsername(username);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
         grantedAuthorities.add(authority);

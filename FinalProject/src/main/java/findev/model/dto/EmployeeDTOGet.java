@@ -10,6 +10,7 @@ public class EmployeeDTOGet {
     private String positionName;
     private String departmentName;
     private String statusName;
+    private String userUsername;
 
     public String getFirstName() {
         return firstName;
@@ -58,5 +59,12 @@ public class EmployeeDTOGet {
     }
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getUserUsername() {
+        return userUsername;
+    }
+    public void setUserUsername(String userUsername) {
+        this.userUsername = userUsername;
     }
 }

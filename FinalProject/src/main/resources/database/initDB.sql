@@ -1,7 +1,6 @@
 CREATE DATABASE findev;
 USE findev;
 
-
 #Security:
 CREATE TABLE roles (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -9,11 +8,11 @@ CREATE TABLE roles (
   UNIQUE (name));
 CREATE TABLE users (
   id       BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role_id  BIGINT(20)   NOT NULL,
   FOREIGN KEY (role_id) REFERENCES roles (id),
-  UNIQUE (email));
+  UNIQUE (username));
 
 
 #Entities:
@@ -31,17 +30,20 @@ CREATE TABLE statuses (
   UNIQUE (name));
 CREATE TABLE employees (
   id            BIGINT(20)     NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  firstname    VARCHAR(255)   NOT NULL,
-  lastname     VARCHAR(255)   NOT NULL,
+  firstname     VARCHAR(255)   NOT NULL,
+  lastname      VARCHAR(255)   NOT NULL,
   email         VARCHAR(255)   NOT NULL,
-  hourrate     DECIMAL(13, 2) NOT NULL,
+  hourrate      DECIMAL(13, 2) NOT NULL,
   position_id   BIGINT(20)     NOT NULL,
   department_id BIGINT(20)     NOT NULL,
   status_id     BIGINT(20)     NOT NULL,
+  user_id       BIGINT(20)     NOT NULL,
   FOREIGN KEY (position_id) REFERENCES positions (id),
   FOREIGN KEY (department_id) REFERENCES departments (id),
   FOREIGN KEY (status_id) REFERENCES statuses (id),
-  UNIQUE (email));
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  #   UNIQUE (email),
+  UNIQUE (firstname, lastname));
 
 
 #Events:

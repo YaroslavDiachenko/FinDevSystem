@@ -5,19 +5,21 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-    @Column(name = "email")
-    private String email;
+    @Column(name = "username")
+    private String username;
     @Column(name = "password")
     private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+    @OneToOne(mappedBy = "user")
+    private Employee employee;
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -32,5 +34,12 @@ public class User extends BaseEntity {
     }
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }
