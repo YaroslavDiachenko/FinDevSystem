@@ -1,11 +1,16 @@
 package findev.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "employees")
-public class Employee extends BaseEntity {
+@Getter
+@Setter
+public class Employee extends BaseIdEntity {
     @Column(name = "firstname")
     private String firstName;
     @Column(name = "lastname")
@@ -26,60 +31,4 @@ public class Employee extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public BigDecimal getHourRate() {
-        return hourRate;
-    }
-    public void setHourRate(BigDecimal hourRate) {
-        this.hourRate = hourRate;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

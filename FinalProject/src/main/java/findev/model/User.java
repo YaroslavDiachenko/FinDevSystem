@@ -1,10 +1,15 @@
 package findev.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+@Getter
+@Setter
+public class User extends BaseIdEntity {
     @Column(name = "username")
     private String username;
     @Column(name = "password")
@@ -14,32 +19,4 @@ public class User extends BaseEntity {
     private Role role;
     @OneToOne(mappedBy = "user")
     private Employee employee;
-
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
 }
