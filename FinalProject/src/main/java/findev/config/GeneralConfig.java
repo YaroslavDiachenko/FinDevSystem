@@ -4,6 +4,7 @@ import findev.model.Employee;
 import findev.model.Event;
 import findev.model.EventType;
 import findev.model.dto.EventDTOGet;
+import findev.model.dto.EventDTOGetCurrentUser;
 import findev.model.dto.EventDTOPost;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,13 @@ public class GeneralConfig {
                     names.add(employee.getLastName());
                 }
                 context.getDestination().setEmployeesLastNames(names);
+                Date date = context.getSource().getDate();
+                context.getDestination().setDate(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                return context.getDestination();
+            });
+
+        modelMapper.createTypeMap(Event.class, EventDTOGetCurrentUser.class).setPostConverter(
+            context -> {
                 Date date = context.getSource().getDate();
                 context.getDestination().setDate(new SimpleDateFormat("yyyy-MM-dd").format(date));
                 return context.getDestination();

@@ -8,6 +8,8 @@ import findev.repository.IRepositoryPosition;
 import findev.repository.IRepositoryStatus;
 import findev.service.interfaces.IEmployeeService;
 import findev.service.interfaces.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,23 +22,19 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping(value = "/employees")
-//@Api(value = "employee", description = "Employees controller")
-public class EmployeeController {
-    @Autowired
-    private IEmployeeService employeeService;
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private IRepositoryPosition repositoryPosition;
-    @Autowired
-    private IRepositoryDepartment repositoryDepartment;
-    @Autowired
-    private IRepositoryStatus repositoryStatus;
-    @Autowired
-    private ModelMapper modelMapper;
+public class EmployeesController {
 
+    @Autowired private IEmployeeService employeeService;
+    @Autowired private IUserService userService;
+    @Autowired private IRepositoryPosition repositoryPosition;
+    @Autowired private IRepositoryDepartment repositoryDepartment;
+    @Autowired private IRepositoryStatus repositoryStatus;
+    @Autowired private ModelMapper modelMapper;
+
+    @ApiOperation(value = "get all employees")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<EmployeeDTOGet>> getAll() {
@@ -50,7 +48,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTOGetList, HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "get object by id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeeDTOGet> get(
@@ -64,9 +62,10 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTOGet, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "get object related to current user")
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/currentuser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<EmployeeDTOGet> getCurrentUser(Principal principal) {
+    public ResponseEntity<EmployeeDTOGet> getByCurrentUser(Principal principal) {
         String currentUsername = principal.getName();
         User currentUser = userService.getByUsername(currentUsername);
         if (currentUser.getEmployee() == null)
@@ -75,21 +74,22 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTOGet, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "save new object")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<EmployeeDTOGet> add(
+    public ResponseEntity<EmployeeDTOGet> createNew(
             @RequestBody EmployeeDTOPost employeeDTOPost) {
         if (employeeDTOPost == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Employee employee = modelMapper.map(employeeDTOPost, Employee.class);
         employee.setId(null);
         employeeService.registerEmployee(employee);
-        employeeService.setNestedData(employee);
 
         EmployeeDTOGet employeeDTOGet = modelMapper.map(employee, EmployeeDTOGet.class);
         return new ResponseEntity<>(employeeDTOGet, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "update existing object")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.POST)
     public ResponseEntity<EmployeeDTOGet> update(
@@ -113,6 +113,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTOGet, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "delete existing object")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.DELETE)
     public ResponseEntity delete(

@@ -10,29 +10,24 @@ import java.util.List;
 
 @Service
 public class PositionService implements IPositionService {
-    @Autowired
-    private IRepositoryPosition repositoryPosition;
+    @Autowired private IRepositoryPosition repositoryPosition;
 
     @Override
     public boolean isExists(Long id) {
         return false;
     }
-
     @Override
     public Position getById(Long id) {
         return repositoryPosition.findOne(id);
     }
-
     @Override
     public Position save(Position position) {
         return null;
     }
-
     @Override
     public void delete(Long id) {
 
     }
-
     @Override
     public List<Position> getAll() {
         return null;

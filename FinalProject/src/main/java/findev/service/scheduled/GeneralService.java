@@ -39,12 +39,17 @@ public class GeneralService {
 
         List<Employee> employees = employeeService.getAll();
         for (Employee employee : employees) {
-            BigDecimal salary = eventService.getEmployeeIncome(
+            BigDecimal salary = eventService.getIncomePerEmployeePerPeriod(
                     employee.getFirstName(),
                     employee.getLastName(),
                     firstDay, lastDay).setScale(2, RoundingMode.CEILING);
             String emailMessage = "Your salary for " + previousMonth + " is $" + salary;
             emailService.sendMail(employee.getEmail(), emailSubject, emailMessage);
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void changeStatusesBusyToFree() {
+        employeeService.changeStatusesBusyToFree();
     }
 }

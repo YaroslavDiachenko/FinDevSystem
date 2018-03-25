@@ -13,5 +13,9 @@ public interface IEmployeeService extends ICrudService<Employee> {
 
     public User generateUser(Employee employee);
 
-    public void setNestedData(Employee employee);
-}
+    public void fetchClassProperties(Employee employee);
+
+    public void changeStatusesBusyToFree();
+
+    public void changeStatusesFreeToBusy(Long employeeId);
+    }
