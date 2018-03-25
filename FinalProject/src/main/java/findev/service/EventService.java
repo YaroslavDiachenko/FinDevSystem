@@ -49,8 +49,7 @@ public class EventService implements IEventService {
 
 
     /**
-     * Get all employees having status 'Free', means ready to be involved in the event being creating at the moment.
-     * Is called to check if listed in event employees are available.
+     * Create new event with the employees specified in the list involved.
      * @param event - employee entity
      * @throws NotFreeEmployeeException - if not all listed in event employees have 'Free' status
      */
