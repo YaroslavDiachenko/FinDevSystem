@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,13 +36,36 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     private RestAuthenticationEntryPoint authenticationEntryPoint;
 
 
+/*
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/swagger*").hasRole("ADMIN")
-                .antMatchers("/*").authenticated()
+                .anyRequest().authenticated()
+                .antMatchers("/swagger-ui.html#").hasRole("ADMIN")
+//                .antMatchers("/swagger*").hasRole("ADMIN")
+//                .antMatchers("/*").authenticated()
                 .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable();
+    }
+*/
+/*
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic()
+                .and().authorizeRequests()
+                .anyRequest().authenticated()
+                .antMatchers("/*").hasRole("ADMIN")
+                .and().csrf().disable().headers().frameOptions().disable();
+    }
+*/
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .antMatchers("/*").hasRole("ADMIN")
+                .and().httpBasic()
                 .and().csrf().disable();
     }
         /*
