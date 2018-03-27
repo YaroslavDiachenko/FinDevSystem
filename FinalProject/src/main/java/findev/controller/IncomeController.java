@@ -6,10 +6,12 @@ import findev.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -18,12 +20,11 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/income")
 public class IncomeController {
-
     @Autowired private IEventService eventService;
     @Autowired private IUserService userService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("")
     public ResponseEntity<BigDecimal> getIncomePerEmployeePerPeriod(
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
@@ -36,7 +37,7 @@ public class IncomeController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/currentuser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/currentuser")
     public ResponseEntity<BigDecimal> getIncomeCurrentUserPerPeriod(
             @RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
             @RequestParam("dateTo")   @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,

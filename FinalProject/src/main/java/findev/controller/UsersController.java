@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +27,9 @@ public class UsersController {
     @Autowired private IUserService userService;
     @Autowired private ModelMapper modelMapper;
 
-
     @ApiOperation(value = "get all users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("")
     public ResponseEntity<List<UserDTOGet>> getAll() {
         List<User> users = userService.getAll();
         if (users.isEmpty())
@@ -43,10 +41,9 @@ public class UsersController {
         return new ResponseEntity<>(uDTOs, HttpStatus.OK);
     }
 
-
     @ApiOperation(value = "get user by id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDTOGet> getById(
             @PathVariable("userId") Long uId) {
         if (uId == null)
@@ -58,10 +55,9 @@ public class UsersController {
         return new ResponseEntity<>(uDTOg, HttpStatus.OK);
     }
 
-
     @ApiOperation(value = "create new user")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public ResponseEntity<UserDTOGet> create(
             @RequestBody UserDTOPost uDTOp) {
         if (uDTOp == null)
@@ -75,10 +71,9 @@ public class UsersController {
         return new ResponseEntity<>(uDTOg, HttpStatus.CREATED);
     }
 
-
     @ApiOperation(value = "update user")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
+    @PostMapping("/{userId}")
     public ResponseEntity<UserDTOGet> update(
             @PathVariable("userId") Long uId,
             @RequestBody UserDTOPost uDTOp) {
@@ -94,10 +89,9 @@ public class UsersController {
         return new ResponseEntity<>(uDTOg, HttpStatus.CREATED);
     }
 
-
     @ApiOperation(value = "delete user by id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{userId}")
     public ResponseEntity delete(
             @PathVariable("userId") Long uId) {
         if (uId == null)
@@ -108,10 +102,9 @@ public class UsersController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
     @ApiOperation(value = "change password")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
+    @PostMapping("/changepassword")
     public ResponseEntity changePasswordCurrentUser(
             @RequestBody UserPasswordDTOPost userPasswordDTOPost,
             Principal principal) {
@@ -120,10 +113,9 @@ public class UsersController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @ApiOperation(value = "reset password")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/resetpassword", method = RequestMethod.GET)
+    @GetMapping("/resetpassword")
     public ResponseEntity resetPassword(
             @RequestParam("username") String username) {
         if (username == null)

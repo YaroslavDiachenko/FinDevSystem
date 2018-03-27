@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +29,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "get all employees")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("")
     public ResponseEntity<List<EmployeeDTOGet>> getAll() {
         List<Employee> empls = employeeService.getAll();
         if (empls.isEmpty())
@@ -44,7 +43,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "get employee by id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "/{employeeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{employeeId}")
     public ResponseEntity<EmployeeDTOGet> getById(
             @PathVariable("employeeId") Long eId) {
         if (eId == null)
@@ -58,7 +57,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "get employee related to current user")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/currentuser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/currentuser")
     public ResponseEntity<EmployeeDTOGet> getByCurrentUser(Principal p) {
         String currentUsername = p.getName();
         User u = userService.getByUsername(currentUsername);
@@ -70,7 +69,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "create new employee")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public ResponseEntity<EmployeeDTOGet> create(
             @RequestBody EmployeeDTOPost eDTOp) {
         if (eDTOp == null)
@@ -84,7 +83,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "update employee")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "/{employeeId}", method = RequestMethod.POST)
+    @PostMapping("/{employeeId}")
     public ResponseEntity<EmployeeDTOGet> update(
             @PathVariable("employeeId") Long eId,
             @RequestBody EmployeeDTOPost eDTOp) throws IllegalAccessException {
@@ -102,7 +101,7 @@ public class EmployeesController {
 
     @ApiOperation(value = "delete employee by id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "/{employeeId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{employeeId}")
     public ResponseEntity delete(
             @PathVariable("employeeId") Long eId) {
         if (eId == null)

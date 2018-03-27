@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>findev.model</OriginalElement>
+  <nodes>
+    <node x="333.0" y="0.0">findev.model.Employee</node>
+    <node x="7.5" y="189.0">findev.service.interfaces.IEmployeeService</node>
+    <node x="51.0" y="0.0">findev.service.interfaces.ICrudService</node>
+    <node x="0.0" y="400.0">findev.service.EmployeeService</node>
+    <node x="624.0" y="321.0">findev.repository.IRepositoryEmployee</node>
+    <node x="227.47390396659705" y="-259.93528183716074">findev.controller.EmployeesController</node>
+    <node x="639.5" y="0.0">org.springframework.data.jpa.repository.JpaRepository</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="findev.service.interfaces.IEmployeeService" target="findev.service.interfaces.ICrudService">
+      <point x="0.0" y="-80.5" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="findev.repository.IRepositoryEmployee" target="org.springframework.data.jpa.repository.JpaRepository">
+      <point x="0.0" y="-47.5" />
+      <point x="0.0" y="135.5" />
+    </edge>
+    <edge source="findev.service.EmployeeService" target="findev.service.interfaces.IEmployeeService">
+      <point x="0.0" y="-202.0" />
+      <point x="0.0" y="80.5" />
+    </edge>
+  </edges>
+  <settings layout="Tree" zoom="0.9143906020558003" x="744.3907178416573" y="55.633049622611225" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

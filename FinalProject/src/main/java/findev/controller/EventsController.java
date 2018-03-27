@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,7 @@ public class EventsController {
     @Autowired private ModelMapper modelMapper;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "/{eventId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{eventId}")
     public ResponseEntity<EventDTOGet> getById(
             @PathVariable("eventId") Long eventId) {
         if (eventId == null)
@@ -44,7 +43,7 @@ public class EventsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/currentuser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/currentuser")
     public ResponseEntity<List<EventDTOGetCurrentUser>> getAllPerCurrentUser(
             @RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
             @RequestParam("dateTo")   @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
@@ -61,7 +60,7 @@ public class EventsController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public ResponseEntity<EventDTOGet> createNew(
             @RequestBody EventDTOPost eventDTOPost) {
         if (eventDTOPost == null)
