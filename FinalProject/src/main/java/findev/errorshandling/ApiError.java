@@ -1,4 +1,4 @@
-package findev.config.errorshandling;
+package findev.errorshandling;
 
 import lombok.Getter;
 import lombok.Setter;

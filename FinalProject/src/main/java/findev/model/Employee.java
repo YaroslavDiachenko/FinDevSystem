@@ -28,7 +28,7 @@ public class Employee extends BaseIdEntity {
     @ManyToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }

@@ -1,7 +1,6 @@
 package findev.service.interfaces;
 
 import findev.model.Employee;
-import findev.model.User;
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ public interface IEmployeeService extends ICrudService<Employee> {
 
     public void registerEmployee(Employee employee);
 
-    public User generateUser(Employee employee);
+    public void updateEmployee(Employee employee) throws IllegalAccessException;
 
     public void fetchClassProperties(Employee employee);
 
     public void changeStatusesBusyToFree();
 
     public void changeStatusesFreeToBusy(Long employeeId);
-    }
+}

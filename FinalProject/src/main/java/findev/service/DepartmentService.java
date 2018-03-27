@@ -10,31 +10,31 @@ import java.util.List;
 
 @Service
 public class DepartmentService implements IDepartmentService {
-    @Autowired
-    private IRepositoryDepartment repositoryDepartment;
+    @Autowired private IRepositoryDepartment repositoryDepartment;
 
     @Override
     public boolean isExists(Long id) {
-        return false;
+        return repositoryDepartment.exists(id);
     }
-
     @Override
     public Department getById(Long id) {
         return repositoryDepartment.findOne(id);
     }
-
     @Override
-    public Department save(Department department) {
-        return null;
+    public Department save(Department p) {
+        return repositoryDepartment.save(p);
     }
-
     @Override
     public void delete(Long id) {
-
+        repositoryDepartment.delete(id);
     }
-
     @Override
     public List<Department> getAll() {
-        return null;
+        return repositoryDepartment.findAll();
     }
+    @Override
+    public Department getByName(String name) {
+        return repositoryDepartment.findByName(name);
+    }
+
 }

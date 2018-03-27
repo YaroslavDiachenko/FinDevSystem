@@ -16,24 +16,24 @@ public class EventTypeService implements IEventTypeService {
     public boolean isExists(Long id) {
         return repositoryEventType.exists(id);
     }
-
     @Override
     public EventType getById(Long id) {
         return repositoryEventType.findOne(id);
     }
-
     @Override
     public EventType save(EventType eventType) {
         return repositoryEventType.save(eventType);
     }
-
     @Override
     public void delete(Long id) {
         repositoryEventType.delete(id);
     }
-
     @Override
     public List<EventType> getAll() {
         return repositoryEventType.findAll();
+    }
+    @Override
+    public EventType getByName(String name) {
+        return repositoryEventType.findByName(name);
     }
 }

@@ -1,26 +1,26 @@
 package findev.service;
 
-import findev.model.*;
+import findev.model.Employee;
+import findev.model.User;
 import findev.repository.IRepositoryEmployee;
-import findev.service.interfaces.IEmployeeService;
-import findev.service.interfaces.IUserService;
+import findev.service.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class EmployeeService implements IEmployeeService {
     @Autowired private IRepositoryEmployee repositoryEmployee;
     @Autowired private IUserService userService;
+    @Autowired private IPositionService positionService;
+    @Autowired private IDepartmentService departmentService;
+    @Autowired private IStatusService statusService;
     @Autowired private EmailService emailService;
-    @Autowired private PositionService positionService;
-    @Autowired private DepartmentService departmentService;
-    @Autowired private StatusService statusService;
 
     @Override
     public boolean isExists(Long id) {
@@ -60,61 +60,73 @@ public class EmployeeService implements IEmployeeService {
     }
 
     /**
-     * Add new employee:
-     * 1. Generate user ({@link #generateUser(Employee)}) with random password ({@link #randomPassword()}),
-     * default user role and username (lowercase combination of first and last names of the employee).
-     * 2. Save generated user to database ({@link #save(Employee)}).
-     * 3. Send notification email to the added employee ({@link EmailService#sendWelcomeEmail(Employee, User)})
+     * Create new employee:
+     * 1. Generate user ({@link UserService#generateUser(Employee)}) with random password ({@link UserService#randomPassword()}),
+     * default user role and username as lowercase combination of the employee's first and last names.
+     * 2. Save generated user to database ({@link UserService#save(User)}).
+     * 3. Send notification to email of the created new employee ({@link EmailService#sendWelcomeEmail(Employee, String)})
      * 4. Fetch data for class properties ({@link #fetchClassProperties(Employee)})
-     * @param employee - employee entity
+     * @param e - employee entity
      */
     @Transactional
     @Override
-    public void registerEmployee(Employee employee) {
-        User user = generateUser(employee);
-        User savedUser = userService.save(user);
-        if (savedUser != null ) savedUser.setUsername(user.getUsername());
-        employee.setUser(savedUser);
-        Employee savedEmployee = save(employee);
-        if (savedUser != null && savedEmployee != null) {
-            emailService.sendWelcomeEmail(employee,user);
+    public void registerEmployee(Employee e) {
+        User u = userService.generateUser(e);
+        String password = u.getPassword();
+        User savedUser = userService.save(u);
+        u.setId(savedUser.getId());
+        e.setUser(u);
+        Employee savedEmployee = save(e);
+        if (savedEmployee != null) {
+            emailService.sendWelcomeEmail(e, password);
         }
-        fetchClassProperties(employee);
-    }
-
-
-    @Override
-    public User generateUser(Employee employee) {
-        User user = new User();
-        user.setUsername(employee.getFirstName().concat(employee.getLastName()).toLowerCase());
-        user.setPassword(randomPassword());
-        Role role = new Role();
-        role.setId(3L);
-        user.setRole(role);
-        return user;
-    }
-    private String randomPassword() {
-        StringBuilder sb = new StringBuilder();
-        Random r = new Random();
-        for (int i = 0; i < 10; i++) {
-            if (i%2 == 0) sb.append((char)(r.nextInt('z' - 'a') + 'a'));
-            else sb.append(r.nextInt(10) + 1);
-        }
-        return sb.toString();
+        fetchClassProperties(e);
     }
 
     /**
-     * Is used to fetch position, department and status names to show full persisted object after saving, since it temporarily cached.
-     * @param employee - employee entity
+     * Update existing employee. Properties values of the existing object are assigned to updated one if missing in passed DTO object.
+     * @param e2 - updated employee entity
+     * @throws IllegalAccessException - if no access to object fields
      */
     @Override
-    public void fetchClassProperties(Employee employee) {
-        Position position = positionService.getById(employee.getPosition().getId());
-        Department department = departmentService.getById(employee.getDepartment().getId());
-        Status status = statusService.getById(employee.getStatus().getId());
-        employee.setPosition(position);
-        employee.setDepartment(department);
-        employee.setStatus(status);
+    public void updateEmployee(Employee e2) throws IllegalAccessException {
+        boolean isChangedFirstOrLastName = false;
+        Employee e1 = getById(e2.getId());
+        Field[] declaredFields = Employee.class.getDeclaredFields();
+        for (Field f : declaredFields) {
+            f.setAccessible(true);
+            Object v2 = f.get(e2);
+            if (v2 == null) {
+                Object v1 = f.get(e1);
+                f.set(e2,v1);
+            }else if (f.getName().equals("firstName") || f.getName().equals("lastName"))
+                isChangedFirstOrLastName = true;
+        }
+        e2.getUser().setId(e1.getUser().getId());
+        save(e2);
+        if (isChangedFirstOrLastName) {
+            User u1 = userService.getById(e1.getUser().getId());
+            String newUsername = userService.generateUser(e2).getUsername();
+            u1.setUsername(newUsername);
+            userService.save(u1);
+        }
+        fetchClassProperties(e2);
+    }
+
+    /**
+     * Is used to fetch data from related tables since after saving employee is temporarily cached before being persisted.
+     * @param e - employee entity
+     */
+    @Override
+    public void fetchClassProperties(Employee e) {
+        if (e.getStatus().getName() == null)
+            e.setStatus(statusService.getById(e.getStatus().getId()));
+        if (e.getPosition().getName() == null)
+            e.setPosition(positionService.getById(e.getPosition().getId()));
+        if (e.getDepartment().getName() == null)
+            e.setDepartment(departmentService.getById(e.getDepartment().getId()));
+        if (e.getUser().getUsername() == null)
+            e.setUser(userService.getById(e.getUser().getId()));
     }
 
     /** Change status to 'Busy' for the employee. Is applied for all employees been added to event.

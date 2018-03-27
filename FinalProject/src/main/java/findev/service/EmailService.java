@@ -1,7 +1,6 @@
 package findev.service;
 
 import findev.model.Employee;
-import findev.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,12 +19,12 @@ public class EmailService {
         javaMailSender.send(mailMessage);
     }
 
-    public void sendWelcomeEmail(Employee employee, User user) {
+    public void sendWelcomeEmail(Employee e, String password) {
         String emailSubject = "Findevsystem registration notification";
-        String emailMessage = "Dear " + employee.getFirstName() + " " + employee.getLastName() + "," +
+        String emailMessage = "Dear " + e.getFirstName() + " " + e.getLastName() + "," +
                 "\n\nYou have been registered in findevsystem.\n\nYour current credentials:" +
-                "\n\n\tusername: \t" + user.getUsername() +
-                "\n\tpassword: \t" + user.getPassword();
-        sendMail(employee.getEmail(),emailSubject,emailMessage);
+                "\n\n\tusername: \t" + e.getUser().getUsername() +
+                "\n\tpassword: \t" + password;
+        sendMail(e.getEmail(),emailSubject,emailMessage);
     }
 }

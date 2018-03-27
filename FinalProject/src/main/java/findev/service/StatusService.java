@@ -10,31 +10,31 @@ import java.util.List;
 
 @Service
 public class StatusService implements IStatusService {
-    @Autowired
-    private IRepositoryStatus repositoryStatus;
+    @Autowired private IRepositoryStatus repositoryStatus;
 
     @Override
     public boolean isExists(Long id) {
-        return false;
+        return repositoryStatus.exists(id);
     }
-
     @Override
     public Status getById(Long id) {
         return repositoryStatus.findOne(id);
     }
-
     @Override
-    public Status save(Status status) {
-        return null;
+    public Status save(Status s) {
+        return repositoryStatus.save(s);
     }
-
     @Override
     public void delete(Long id) {
-
+        repositoryStatus.delete(id);
     }
-
     @Override
     public List<Status> getAll() {
-        return null;
+        return repositoryStatus.findAll();
     }
+    @Override
+    public Status getByName(String name) {
+        return repositoryStatus.findByName(name);
+    }
+
 }

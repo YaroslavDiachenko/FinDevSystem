@@ -1,11 +1,9 @@
 package findev.controller;
 
-import findev.model.*;
+import findev.model.Employee;
+import findev.model.User;
 import findev.model.dto.EmployeeDTOGet;
 import findev.model.dto.EmployeeDTOPost;
-import findev.repository.IRepositoryDepartment;
-import findev.repository.IRepositoryPosition;
-import findev.repository.IRepositoryStatus;
 import findev.service.interfaces.IEmployeeService;
 import findev.service.interfaces.IUserService;
 import io.swagger.annotations.Api;
@@ -26,103 +24,92 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeesController {
-
     @Autowired private IEmployeeService employeeService;
     @Autowired private IUserService userService;
-    @Autowired private IRepositoryPosition repositoryPosition;
-    @Autowired private IRepositoryDepartment repositoryDepartment;
-    @Autowired private IRepositoryStatus repositoryStatus;
     @Autowired private ModelMapper modelMapper;
 
     @ApiOperation(value = "get all employees")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<EmployeeDTOGet>> getAll() {
-        List<Employee> employeeList = employeeService.getAll();
-        if (employeeList.isEmpty())
+        List<Employee> empls = employeeService.getAll();
+        if (empls.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<EmployeeDTOGet> employeeDTOGetList = new ArrayList<>();
-        for (Employee employee : employeeList) {
-            employeeDTOGetList.add(modelMapper.map(employee, EmployeeDTOGet.class));
+        List<EmployeeDTOGet> eDTOs = new ArrayList<>();
+        for (Employee e : empls) {
+            eDTOs.add(modelMapper.map(e, EmployeeDTOGet.class));
         }
-        return new ResponseEntity<>(employeeDTOGetList, HttpStatus.OK);
+        return new ResponseEntity<>(eDTOs, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "get object by id")
+    @ApiOperation(value = "get employee by id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<EmployeeDTOGet> get(
-            @PathVariable("employeeId") Long employeeId) {
-        if (employeeId == null)
+    public ResponseEntity<EmployeeDTOGet> getById(
+            @PathVariable("employeeId") Long eId) {
+        if (eId == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Employee employee = employeeService.getById(employeeId);
-        if (employee == null)
+        Employee e = employeeService.getById(eId);
+        if (e == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        EmployeeDTOGet employeeDTOGet = modelMapper.map(employee, EmployeeDTOGet.class);
-        return new ResponseEntity<>(employeeDTOGet, HttpStatus.OK);
+        EmployeeDTOGet eDTOg = modelMapper.map(e, EmployeeDTOGet.class);
+        return new ResponseEntity<>(eDTOg, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "get object related to current user")
+    @ApiOperation(value = "get employee related to current user")
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/currentuser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<EmployeeDTOGet> getByCurrentUser(Principal principal) {
-        String currentUsername = principal.getName();
-        User currentUser = userService.getByUsername(currentUsername);
-        if (currentUser.getEmployee() == null)
+    public ResponseEntity<EmployeeDTOGet> getByCurrentUser(Principal p) {
+        String currentUsername = p.getName();
+        User u = userService.getByUsername(currentUsername);
+        if (u.getEmployee() == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        EmployeeDTOGet employeeDTOGet = modelMapper.map(currentUser.getEmployee(), EmployeeDTOGet.class);
-        return new ResponseEntity<>(employeeDTOGet, HttpStatus.OK);
+        EmployeeDTOGet eDTOg = modelMapper.map(u.getEmployee(), EmployeeDTOGet.class);
+        return new ResponseEntity<>(eDTOg, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "save new object")
+    @ApiOperation(value = "create new employee")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<EmployeeDTOGet> createNew(
-            @RequestBody EmployeeDTOPost employeeDTOPost) {
-        if (employeeDTOPost == null)
+    public ResponseEntity<EmployeeDTOGet> create(
+            @RequestBody EmployeeDTOPost eDTOp) {
+        if (eDTOp == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Employee employee = modelMapper.map(employeeDTOPost, Employee.class);
-        employee.setId(null);
-        employeeService.registerEmployee(employee);
-
-        EmployeeDTOGet employeeDTOGet = modelMapper.map(employee, EmployeeDTOGet.class);
-        return new ResponseEntity<>(employeeDTOGet, HttpStatus.CREATED);
+        Employee e = modelMapper.map(eDTOp, Employee.class);
+        e.setId(null);
+        employeeService.registerEmployee(e);
+        EmployeeDTOGet eDTOg = modelMapper.map(e, EmployeeDTOGet.class);
+        return new ResponseEntity<>(eDTOg, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "update existing object")
+    @ApiOperation(value = "update employee")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.POST)
     public ResponseEntity<EmployeeDTOGet> update(
-            @PathVariable("employeeId") Long employeeId,
-            @RequestBody EmployeeDTOPost employeeDTOPost) {
-        if (employeeId == null)
+            @PathVariable("employeeId") Long eId,
+            @RequestBody EmployeeDTOPost eDTOp) throws IllegalAccessException {
+        if (eId == null || eDTOp == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        boolean isExists = employeeService.isExists(employeeId);
+        boolean isExists = employeeService.isExists(eId);
         if (!isExists)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Employee employee = modelMapper.map(employeeDTOPost, Employee.class);
-        employee.setId(employeeId);
-        Employee employee1 = employeeService.save(employee);
-        Position position = repositoryPosition.findOne(employee1.getPosition().getId());
-        Department department = repositoryDepartment.findOne(employee1.getDepartment().getId());
-        Status status = repositoryStatus.findOne(employee1.getStatus().getId());
-        employee1.setPosition(position);
-        employee1.setDepartment(department);
-        employee1.setStatus(status);
-        EmployeeDTOGet employeeDTOGet = modelMapper.map(employee1, EmployeeDTOGet.class);
-        return new ResponseEntity<>(employeeDTOGet, HttpStatus.CREATED);
+        Employee e = modelMapper.map(eDTOp, Employee.class);
+        e.setId(eId);
+        employeeService.updateEmployee(e);
+        EmployeeDTOGet eDTOg = modelMapper.map(e, EmployeeDTOGet.class);
+        return new ResponseEntity<>(eDTOg, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "delete existing object")
+    @ApiOperation(value = "delete employee by id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODER')")
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.DELETE)
     public ResponseEntity delete(
-            @PathVariable("employeeId") Long employeeId) {
-        if (employeeId == null)
+            @PathVariable("employeeId") Long eId) {
+        if (eId == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (employeeService.getById(employeeId) == null)
+        if (employeeService.getById(eId) == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        employeeService.delete(employeeId);
+        employeeService.delete(eId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

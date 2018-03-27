@@ -64,18 +64,3 @@ CREATE TABLE events_employees (
   FOREIGN KEY (event_id) REFERENCES events (id),
   FOREIGN KEY (employee_id) REFERENCES employees (id),
   UNIQUE (event_id, employee_id));
-
-
-
-/*
-CREATE TABLE employees_absence (
-  id          BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  date        DATE       NOT NULL,
-  employee_id BIGINT(20) NOT NULL,
-  status_id   BIGINT(20) NOT NULL,
-  FOREIGN KEY (employee_id) REFERENCES employees (id),
-  FOREIGN KEY (status_id) REFERENCES statuses (id));
-*/
-
-
-

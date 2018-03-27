@@ -1,6 +1,6 @@
 package findev.service;
 
-import findev.config.errorshandling.NotFreeEmployeeException;
+import findev.errorshandling.customexceptions.NotFreeEmployeeException;
 import findev.model.Employee;
 import findev.model.Event;
 import findev.model.EventType;

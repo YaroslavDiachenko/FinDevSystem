@@ -14,22 +14,26 @@ public class PositionService implements IPositionService {
 
     @Override
     public boolean isExists(Long id) {
-        return false;
+        return repositoryPosition.exists(id);
     }
     @Override
     public Position getById(Long id) {
         return repositoryPosition.findOne(id);
     }
     @Override
-    public Position save(Position position) {
-        return null;
+    public Position save(Position p) {
+        return repositoryPosition.save(p);
     }
     @Override
     public void delete(Long id) {
-
+        repositoryPosition.delete(id);
     }
     @Override
     public List<Position> getAll() {
-        return null;
+        return repositoryPosition.findAll();
+    }
+    @Override
+    public Position getByName(String name) {
+        return repositoryPosition.findByName(name);
     }
 }

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class EmployeeDTOGet {
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;

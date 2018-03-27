@@ -20,7 +20,7 @@ public class Event extends BaseIdEntity {
     private Date date;
     @Column(name = "hours")
     private BigDecimal hours;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "events_employees",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
