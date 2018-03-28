@@ -1,8 +1,8 @@
-CREATE DATABASE findev;
+CREATE DATABASE IF NOT EXISTS findev;
 USE findev;
 
 #Security:
-CREATE TABLE roles (
+CREATE TABLE IF NOT EXISTS roles (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   UNIQUE (name));
@@ -16,11 +16,11 @@ CREATE TABLE users (
 
 
 #Entities:
-CREATE TABLE positions (
+CREATE TABLE IF NOT EXISTS positions (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   UNIQUE (name));
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   UNIQUE (name));
@@ -28,7 +28,7 @@ CREATE TABLE statuses (
   id   BIGINT(20)   NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   UNIQUE (name));
-CREATE TABLE employees (
+CREATE TABLE IF NOT EXISTS employees (
   id            BIGINT(20)     NOT NULL AUTO_INCREMENT PRIMARY KEY,
   firstname     VARCHAR(255)   NOT NULL,
   lastname      VARCHAR(255)   NOT NULL,
@@ -47,18 +47,18 @@ CREATE TABLE employees (
 
 
 #Events:
-CREATE TABLE eventtypes (
+CREATE TABLE IF NOT EXISTS eventtypes (
   id    BIGINT(20)     NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name  VARCHAR(255)   NOT NULL,
   coeft DECIMAL(13, 2) NOT NULL,
   UNIQUE (name));
-CREATE TABLE events (
+CREATE TABLE IF NOT EXISTS events (
   id           BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   date         DATE       NOT NULL,
   hours        BIGINT(20) NOT NULL,
   eventtype_id BIGINT(20) NOT NULL,
   FOREIGN KEY (eventtype_id) REFERENCES eventtypes (id));
-CREATE TABLE events_employees (
+CREATE TABLE IF NOT EXISTS events_employees (
   event_id    BIGINT(20) NOT NULL,
   employee_id BIGINT(20) NOT NULL,
   FOREIGN KEY (event_id) REFERENCES events (id),
