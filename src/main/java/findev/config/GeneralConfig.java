@@ -19,6 +19,8 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 public class GeneralConfig {
+
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();

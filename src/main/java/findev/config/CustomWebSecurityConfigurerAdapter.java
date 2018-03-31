@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,60 +23,56 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 
     @Autowired private UserDetailsService userDetailsService;
 
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
-    }
+    @Autowired private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired private MySavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordencoder(){
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    private RestAuthenticationEntryPoint authenticationEntryPoint;
 
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+    }
 
 /*
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .antMatchers("/swagger-ui.html#").hasRole("ADMIN")
-//                .antMatchers("/swagger*").hasRole("ADMIN")
-//                .antMatchers("/*").authenticated()
-                .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint)
-//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().csrf().disable();
-    }
-*/
-/*
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
-                .and().authorizeRequests()
-                .anyRequest().authenticated()
-                .antMatchers("/*").hasRole("ADMIN")
-                .and().csrf().disable().headers().frameOptions().disable();
-    }
-*/
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .antMatchers("/*").hasRole("ADMIN")
-                .and().httpBasic()
-                .and().csrf().disable();
-    }
-        /*
-    // for testing ...
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("user")
-                .roles("USER")
+                .withUser("admin").password("admin").roles("ADMIN")
+                .and()
+                .withUser("user").password("user").roles("USER");
     }
-    */
+*/
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and().authorizeRequests().anyRequest().authenticated()
+//                .antMatchers("/employees").hasRole("ADMIN")
+//                .antMatchers("/events").hasRole("USER")
+                .and().formLogin()
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .and()
+                .logout();
+    }
+
+    @Bean
+    public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
+        return new MySavedRequestAwareAuthenticationSuccessHandler();
+    }
+    @Bean
+    public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
+        return new SimpleUrlAuthenticationFailureHandler();
+    }
 }
