@@ -49,7 +49,7 @@ public class EventsController {
             @RequestParam("dateTo")   @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
             Principal principal) {
         String currentUsername = principal.getName();
-        List<Event> eventList = eventService.getEventsPerEmployeePerPeriod(currentUsername, dateFrom, dateTo);
+        List<Event> eventList = eventService.getEventsByUsernamePerPeriod(currentUsername, dateFrom, dateTo);
         if (eventList.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         List<EventDTOGetCurrentUser> eventDTOGetCurrentUserList = new ArrayList<>();

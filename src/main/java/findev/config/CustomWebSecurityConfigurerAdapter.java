@@ -32,27 +32,15 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
         return new BCryptPasswordEncoder();
     }
 
-
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
     }
 
-/*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-
-        auth.inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("ADMIN")
-                .and()
-                .withUser("user").password("user").roles("USER");
-    }
-*/
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+/*
         http
                 .csrf().disable()
                 .exceptionHandling()
@@ -65,6 +53,11 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
                 .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and()
                 .logout();
+    }
+*/
+        http.httpBasic()
+                .and().csrf().disable()
+                .authorizeRequests().anyRequest().authenticated();
     }
 
     @Bean

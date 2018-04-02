@@ -5,6 +5,7 @@ import findev.model.User;
 import findev.repository.IRepositoryEmployee;
 import findev.service.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,11 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public List<Employee> getAll() {
         return repositoryEmployee.findAll();
+    }
+
+    @Override
+    public Employee getByFirstNameAndLastName(String firstName, String lastName) {
+        return repositoryEmployee.findEmployeeByFirstNameAndLastName(firstName, lastName);
     }
 
 
@@ -84,7 +90,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     /**
-     * Update existing employee. Properties values of the existing object are assigned to updated one if missing in passed DTO object.
+     * Update existing employee. Specified properties only are updated.
      * @param e2 - updated employee entity
      * @throws IllegalAccessException - if no access to object fields
      */
@@ -137,11 +143,10 @@ public class EmployeeService implements IEmployeeService {
         repositoryEmployee.changeStatusesFreeToBusy(employeeId);
     }
 
-    /** Is used by scheduler to set back each new day 'Busy' statuses to 'Free'. */
+    /** Automatically changes 'Busy' statuses for all employees to 'Free' at the end of each day. */
     @Override
+    @Scheduled(cron = "0 0 0 * * *")
     public void changeStatusesBusyToFree() {
         repositoryEmployee.changeStatusesBusyToFree();
     }
-
-
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,19 +93,32 @@ public class EventService implements IEventService {
      */
     @Override
     public BigDecimal getIncomePerEmployeePerPeriod(String firstName, String lastName, Date dateFrom, Date dateTo) {
-        return repositoryEvent.getIncomePerEmployeePerPeriod(firstName, lastName, dateFrom, dateTo);
+        return repositoryEvent.getIncomePerEmployeePerPeriod(firstName, lastName, dateFrom, dateTo).setScale(2, RoundingMode.CEILING);
     }
 
-    /** Get list of the events the employee participated in.
+    /** Get list of the events the employee participated in during the specified period of time.
+     * @param employeeId - employee's id
+     * @param dateFrom - start date of the events cover period
+     * @param dateTo - end date of the events cover period
+     * @return - list of the events the employee participated in
+     */
+    @Override
+    public List<Event> getEventsByEmployeePerPeriod(Long employeeId, Date dateFrom, Date dateTo) {
+        return repositoryEvent.getEventsPerEmployeePerPeriod(employeeId, dateFrom, dateTo);
+    }
+
+    /** Get list of the events the employee participated in during the specified period of time.
+     * Used to retrieve data for current user.
      * @param username - employee's username
      * @param dateFrom - start date of the events cover period
      * @param dateTo - end date of the events cover period
      * @return - list of the events the employee participated in
      */
     @Override
-    public List<Event> getEventsPerEmployeePerPeriod(String username, Date dateFrom, Date dateTo) {
+    public List<Event> getEventsByUsernamePerPeriod(String username, Date dateFrom, Date dateTo) {
         User currentUser = userService.getByUsername(username);
         Long employeeId = currentUser.getEmployee().getId();
         return repositoryEvent.getEventsPerEmployeePerPeriod(employeeId, dateFrom, dateTo);
     }
+
 }

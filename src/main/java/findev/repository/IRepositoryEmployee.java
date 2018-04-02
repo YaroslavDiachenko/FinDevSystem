@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface IRepositoryEmployee extends JpaRepository<Employee, Long> {
 
+    public Employee findEmployeeByFirstNameAndLastName(String firstName, String lastName);
+
     @Query(value = "SELECT id FROM employees WHERE status_id = 1", nativeQuery = true)
     public List<BigInteger> getFreeEmployeesIds();
 

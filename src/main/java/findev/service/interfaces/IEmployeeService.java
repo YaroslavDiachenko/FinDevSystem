@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IEmployeeService extends ICrudService<Employee> {
 
+    public Employee getByFirstNameAndLastName(String firstName, String lastName);
+
     public List<Long> getFreeEmployeesIds();
 
     public void registerEmployee(Employee employee);

@@ -29,10 +29,6 @@ public class UserService implements IUserService {
         return repositoryUser.findOne(id);
     }
     @Override
-    public User getByUsername(String username) {
-        return repositoryUser.findByUsername(username);
-    }
-    @Override
     public User save(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return repositoryUser.save(u);
@@ -46,6 +42,11 @@ public class UserService implements IUserService {
         return repositoryUser.findAll();
     }
 
+    @Override
+    public User getByUsername(String username) {
+        return repositoryUser.findByUsername(username);
+    }
+
 
     /**
      * Change password for the user with specified username.
@@ -56,7 +57,7 @@ public class UserService implements IUserService {
     @Override
     public void changePassword(String username, String oldPassword, String newPassword) {
         User user = getByUsername(username);
-        if (oldPassword.equals(user.getPassword())) {
+        if (passwordEncoder.encode(oldPassword).equals(user.getPassword())) {
             user.setPassword(newPassword);
             repositoryUser.save(user);
         }
@@ -73,13 +74,10 @@ public class UserService implements IUserService {
         User u = getByUsername(username);
         if (u == null)
             throw new MissingUserException("Missing user with specified username.");
-        u.setPassword(randomPassword());
+        String newPassword = randomPassword();
+        u.setPassword(newPassword);
         save(u);
-        String email = u.getEmployee().getEmail();
-        String subject = "Findevsystem credentials";
-        String messsage = "Dear " + u.getEmployee().getFirstName() + " " + u.getEmployee().getLastName() + "," +
-                "\n\nYour new password: \t" + u.getPassword();
-        emailService.sendMail(email, subject, messsage);
+        emailService.sentNewPasswordEmail(u.getEmployee(), newPassword);
     }
 
     /**

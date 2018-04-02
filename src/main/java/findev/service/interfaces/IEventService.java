@@ -12,7 +12,9 @@ public interface IEventService extends ICrudService<Event> {
 
     public void createEvent(Event event, List<Long> employeesIds);
 
-    public List<Event> getEventsPerEmployeePerPeriod(String username, Date dateFrom, Date dateTo);
+    public List<Event> getEventsByUsernamePerPeriod(String username, Date dateFrom, Date dateTo);
+
+    public List<Event> getEventsByEmployeePerPeriod(Long employeeId, Date dateFrom, Date dateTo);
 
     public void fetchClassProperties(Event event);
 
