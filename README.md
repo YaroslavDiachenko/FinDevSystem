@@ -1,6 +1,6 @@
 # FinDevSystem
 
-Is a back-end RESTfull server application for staff management and financial accounting. As a management instrument it allows to create daily events and assign relevant  employees. FinDevSystem stores in database information about all employees and events they took part in. Financial component provides for calculation of employees' monthly salaries and scheduled auto mailing of payslips. 
+Is a back-end RESTful server application for staff management and financial accounting. As a management instrument it allows to create daily events and assign relevant  employees. FinDevSystem stores in database information about all employees and events they took part in. Financial component provides for calculation of employees' monthly salaries and scheduled auto mailing of payslips. 
 
 ## Access
 There are available following levels of access:
@@ -16,12 +16,6 @@ Moderator creates events on daily basis. System allows to add one or more free e
 - **on vacation** (not available)
 
 Each event contains its type, date and duration (in hours).
-![events_create](images/events_create.png)
-
-### Income query
-Each employee at the beginning of each month receives on mail pdf payslip containing  salary amount for previous month and listed events the employee took part in accordingly. See sample
-
-Moderator and administrator can request income amount of an employee indicating 
 
 ### Employee
 Upon registration each employee receives an e-mail notification.
@@ -37,7 +31,7 @@ Information about employee:
 - hourly rate
 - status
 
-At the beginning of each month an employee receives on mail pdf payslip containing  salary amount for previous month and listed events the employee took part in accordingly.
+At the beginning of each month an employee receives on mail pdf [payslip](/documents/PayslipSample.pdf) containing  salary amount for previous month and listed events the employee took part in accordingly.
 
 ![mail2](images/mail2.png)
 
@@ -73,6 +67,8 @@ Link to web server: [FinDevSystem](https://findevsystem.herokuapp.com/swagger-ui
 
 
 ## Technical overview
+[MVC structure](/documents/UMLDiagram.pdf)
+
 - Java
 - MySQL
 - Spring Boot
